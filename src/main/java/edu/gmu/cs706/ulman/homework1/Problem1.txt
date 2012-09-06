@@ -1,0 +1,47 @@
+Problem 1
+
+Assuming, for simplicity, that initially x = 0, the programmer might see:
+
+x == -1
+
+or
+
+x == -2
+
+after both threads have finished.
+
+
+The following execution sequences of assembly level load/add/store
+operations demonstrate how both possible results can be obtained.
+There are other possible execution sequences, but all result in either
+x == -1 or x == -2.
+
+
+Thread 1                 Thread 2               Comments
+-----------------------------------------------------------
+load  local x = 0
+add   local x = -1
+store x
+
+   ---> context switch
+   
+                         load local x = -1
+                         add  local x = -2
+                         store x                Final x = -2
+                         
+                         
+                         
+ Thread 1                 Thread 2               Comments
+-----------------------------------------------------------
+load  local x = 0
+
+   ---> context switch
+
+                         load local x = 0
+                         add  local x = -1
+                         store x
+                         
+   context switch <---
+                         
+add   local x = -1
+store x                                          Final x = -1
