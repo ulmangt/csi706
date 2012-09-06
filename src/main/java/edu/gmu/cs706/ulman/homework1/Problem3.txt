@@ -16,30 +16,3 @@ T0                T1                 Comments
 (2)                                  intendToEnter0 = true
 (3)                                  intendToEnter1 == true, but turn != 1 so while loop is skipped
 (4)                                  T0 enters critical section
-
-
-If T0 is in the critical section, there are three possibilities:
-
-1) intendToEnter1 == false
-
-If this is true, then T1 clearly cannot be in its critical section.
-
-2) turn == 0
-
-In this case, T1 can only be in its critical section if intendToEnter0 == false
-(because it cannot enter its critical section while turn == 0 any other way).
-So either T1 is not in its critical section, or it is and intendToEnter0 == false.
-However, because we are assuming that T0 is in its critical section, intendToEnter0
-must be true. Therefore T1 cannot be in its critical section.
-
-3) intendToEnter1 == false && turn == 0
-
-See case 1.
-
-
-Therefore, mutual exclusion is still guaranteed. This makes intuitive sense because
-the reordering does not allow any combinations of values for turn, intendToEnter0, and
-intendToEnter1 which were not possible with the other ordering.
-
-
-The modified version also still guarantees progress.
