@@ -1,0 +1,18 @@
+Problem 4 - Exercise 2.10
+
+Because T1 does not immediately see T0's writes and vice versa, the following instruction
+ordering can occur which violates mutual exclusion. Therefore, Peterson's Algorithm can
+fail if write buffers like those described in Exercise 2.10 are used.
+
+T0                T1                 Comments
+---------------------------------------------
+(1)                                  intendToEnter0 write is placed in buffer
+(2)                                  turn write is placed in buffer
+(3)                                  intendToEnter1 = false, so T0 does not enter while loop
+(4)                                  T0 enters critical section
+   ---> context switch
+                  (1)                intendToEnter1 write is placed in buffer
+                  (2)                turn write is placed in buffer
+                  (3)                intendToEnter0 write is still in buffer, so T1 still sees
+                                     intentToEnter0 = false and does not enter while loop
+                  (4)                T1 enters critical section
