@@ -28,7 +28,7 @@ public class Problem6
             while ( true )
             {
                 // wait outside of the critical section for our turn
-                // this violates bounded wait, but this is inevitable
+                // this violates progress requirement, but this is inevitable
                 // because we are specifically required to have the
                 // threads take turns
                 while( turn == 1 )
