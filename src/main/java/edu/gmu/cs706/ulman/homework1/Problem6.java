@@ -6,12 +6,8 @@ public class Problem6
 {
     public static void main( String[] args )
     {
-        int numThreads = 2;
-        
-        for ( int i = 0 ; i < numThreads ; i++ )
-        {
-            new IncrementThread( i, numThreads ).start( );
-        }
+        new IncrementThread0( ).start( );
+        new IncrementThread1( ).start( );
     }
     
     // controls access to critical section
@@ -19,27 +15,27 @@ public class Problem6
     
     // turn counter indicating which thread
     // should proceed into the critical section next
-    private static int turn = 0;
+    private static volatile int turn = 0;
     
     // counter incremented by multiple threads
     private static int s = 0;
     
-    public static class IncrementThread extends Thread
+    public static class IncrementThread0 extends Thread
     {
-        private int id;
-        private int numThreads;
-        
-        public IncrementThread( int id, int numThreads )
-        {
-            this.id = id;
-            this.numThreads = numThreads;
-        }
-        
         @Override
         public void run( )
         {
             while ( true )
             {
+                // wait outside of the critical section for our turn
+                // this violates bounded wait, but this is inevitable
+                // because we are specifically required to have the
+                // threads take turns
+                while( turn == 1 )
+                {
+                    // busy wait
+                }
+                
                 // return false if nothing is inside
                 // the critical section and we can proceed
                 while ( b.getAndSet( true ) )
@@ -47,17 +43,53 @@ public class Problem6
                     // busy wait
                 }
                 
-                // only increment if it is our turn
-                // otherwise simply exit critical section and
-                // continue busy waiting
-                if ( turn == id )
-                {
-                    s = s + 1;
-                    turn = ( turn + 1 ) % numThreads;
-                    
-                    System.out.printf( "Thread %d takes turn (s = %d)%n", id, s );
-                }
+                // increment s inside critical section
+                s = s + 1;
+                
+                // set turn inside critical section
+                turn = 1;
 
+                System.out.printf( "Thread 0 takes turn (s = %d)%n", s );
+                
+                // allow others to enter the critical section
+                b.set( false );
+
+                // non-critical section
+            }
+        }
+    }
+    
+    public static class IncrementThread1 extends Thread
+    {
+        @Override
+        public void run( )
+        {
+            while ( true )
+            {
+                // wait outside of the critical section for our turn
+                // this violates bounded wait, but this is inevitable
+                // because we are specifically required to have the
+                // threads take turns
+                while( turn == 0 )
+                {
+                    // busy wait
+                }
+                
+                // return false if nothing is inside
+                // the critical section and we can proceed
+                while ( b.getAndSet( true ) )
+                {
+                    // busy wait
+                }
+                
+                // increment s inside critical section
+                s = s + 1;
+                
+                // set turn inside critical section
+                turn = 0;
+
+                System.out.printf( "Thread 1 takes turn (s = %d)%n", s );
+                
                 // allow others to enter the critical section
                 b.set( false );
 
