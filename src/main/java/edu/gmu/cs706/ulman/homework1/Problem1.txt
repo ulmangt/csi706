@@ -1,5 +1,7 @@
 Problem 1
 
+Yes, the programmer will see unexpected results.
+
 Assuming, for simplicity, that initially x = 0, the programmer might see:
 
 x == -1

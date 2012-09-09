@@ -1,8 +1,13 @@
 Problem 4 - Exercise 2.10
 
-Because T1 does not immediately see T0's writes and vice versa, the following instruction
-ordering can occur which violates mutual exclusion. Therefore, Peterson's Algorithm can
-fail if write buffers like those described in Exercise 2.10 are used.
+If threads T0 and T1 run on the *same* processor, then Peterson's algorithm does not fail
+because reads cannot bypass pending writes of the same variable.
+
+However, because the problem states the threads run on *different* processors, T1 does not
+immediately see T0's writes and vice versa. In this case, if the following instruction
+ordering occurs mutual exclusion is violated. Therefore, Peterson's Algorithm can
+fail if write buffers like those described in Exercise 2.10 are used and the threads execute
+on different processors.
 
 T0                T1                 Comments
 ---------------------------------------------
