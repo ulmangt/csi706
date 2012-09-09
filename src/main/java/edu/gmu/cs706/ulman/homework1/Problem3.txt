@@ -10,7 +10,7 @@ T0                T1                 Comments
    ---> context switch
                   (1)                turn = 0
                   (2)                intendToEnter1 = true
-                  (3)                both conditions are false, while loop is skipped
+                  (3)                intendToEnter0 == false, while loop is skipped
                   (4)                T1 enters critical section
    context switch <---
 (2)                                  intendToEnter0 = true
