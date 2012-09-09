@@ -1,3 +1,14 @@
+// CS706
+// Homework 1
+// 9/9/2012
+// Wu Lan
+// Geoffrey Ulman
+// 
+//------------------------------------------------------------------------
+//
+// ==== Problem 5 ====
+//
+
 package edu.gmu.cs706.ulman.homework1;
 
 import java.util.concurrent.atomic.AtomicBoolean;

@@ -1,4 +1,12 @@
-Problem 3 - Exercise 2.5
+CS706
+Homework 1
+9/9/2012
+Wu Lan
+Geoffrey Ulman
+
+------------------------------------------------------------------------
+
+==== Problem 3 - Exercise 2.5 ====
 
 The modified version of Peterson's Algorithm does not guarantee mutual exclusion.
 

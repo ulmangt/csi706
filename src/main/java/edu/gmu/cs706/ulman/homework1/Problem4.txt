@@ -1,4 +1,12 @@
-Problem 4 - Exercise 2.10
+CS706
+Homework 1
+9/9/2012
+Wu Lan
+Geoffrey Ulman
+
+------------------------------------------------------------------------
+
+==== Problem 4 - Exercise 2.10 ====
 
 If threads T0 and T1 run on the *same* processor, then Peterson's algorithm does not fail
 because reads cannot bypass pending writes of the same variable.

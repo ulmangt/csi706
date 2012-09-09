@@ -1,8 +1,14 @@
-Problem 2 - Exercise 1.11
+CS706
+Homework 1
+9/9/2012
+Wu Lan
+Geoffrey Ulman
 
----------------------------
+------------------------------------------------------------------------
 
-Part a
+==== Problem 2 - Exercise 1.11 ====
+
+==== Part a ====
 
 P     = 10
 tp(P) = 3
@@ -18,9 +24,9 @@ speedup = T(1) / T(P) = [ ts + tp(1) ] / [ ts + tp(P) ]
 
 speedup = 37 / 10 = 3.7
 
----------------------------
 
-Part b
+
+==== Part b ====
 
 P     = 10
 tp(P) = 7
@@ -36,9 +42,9 @@ speedup = T(1) / T(P) = [ ts + tp(1) ] / [ ts + tp(P) ]
 
 speedup = 73 / 10 = 7.3
 
----------------------------
 
-Part c
+
+==== Part c ====
 
 The speedup was greater for part b because the total amount of parallelizable work
 was much larger (70 seconds versus 30 seconds) and the total amount of serial work
