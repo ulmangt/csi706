@@ -1,0 +1,25 @@
+Exercise 3.3
+
+Part a
+
+Yes, a leading writer may be forced to wait on readers_w_que.P().
+
+Consider the following interleaving:
+
+1) Reader thread R1 enters entry section and calls readers_w_que.P(). It does not block because readers_w_que is initialized to 1 and R1 is a leading reader.
+
+2) A context switch occurs and Writer thread W1 enters entry section and and increments waitingOrWritingWriters (which is now 1).
+
+3) W1 executes readers_w_que.P() because waitingOrWritingWriters == 1 (it is a leading writer). However, because R1 has called readers_w_que.P() but not readers_w_que.V(), W1 is blocked.
+
+Part b
+
+No, a Reader thread may not be forced to wait on writers_que.P().
+
+Only a lead Reader (a reader which sets activeReaders to 1) can call writers_que.P(). Thus, a reader calling writers_que.P() cannot block because of another queued reader. So we must only consider the possibility of there being a queued writer.
+
+If any Writer thread holds writers_que.P() and has not yet called writers_que.V() (meaning it is inside the critical section) then it must also hold readers_w_que.P(). This must be the case because the lead Writer thread must call readers_w_que.P() before calling writers_que.P() and cannot call readers_w_que.V() until after it has called writers_que.V().
+
+Thus, a Reader thread blocking on writers_que.P() is impossible due to a queued writer because the Reader thread would first block on readers_w_que.P(), which a Writer thread must also hold if a Writer thread holds writers_que.P().
+
+We have shown that a Reader thread cannot block on writers_que.P() due to either another Reader thread or a Writer thread.
