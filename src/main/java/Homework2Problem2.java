@@ -89,7 +89,7 @@ public class Homework2Problem2
                 turn_queue_0.V( );
 
                 System.out.printf( "Thread 1 takes turn (s = %d)%n", s );
-
+                
                 // end critical section
                 mutex.V( );
             }
