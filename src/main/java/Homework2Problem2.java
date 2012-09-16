@@ -11,10 +11,16 @@
 
 public class Homework2Problem2
 {
-    public static void main( String[] args )
+    public static void main( String[] args ) throws InterruptedException
     {
-        new IncrementThread0( ).start( );
-        new IncrementThread1( ).start( );
+        TDThread t0 = new IncrementThread0( );
+        TDThread t1 = new IncrementThread1( );
+        
+        t0.start( );
+        t1.start( );
+        
+        t0.join( );
+        t1.join( );
     }
 
     // controls access to critical section
@@ -30,7 +36,7 @@ public class Homework2Problem2
     // counter incremented by multiple threads
     private static int s = 0;
 
-    public static class IncrementThread0 extends Thread
+    public static class IncrementThread0 extends TDThread
     {
         @Override
         public void run( )
@@ -60,7 +66,7 @@ public class Homework2Problem2
         }
     }
 
-    public static class IncrementThread1 extends Thread
+    public static class IncrementThread1 extends TDThread
     {
         @Override
         public void run( )
