@@ -51,8 +51,8 @@ public class Homework2Problem3
             this.count = 0;
             this.n = n;
 
-            this.mutex = new binarySemaphore( 1 );
-            this.queue = new binarySemaphore( 0 );
+            this.mutex = new binarySemaphore( 1, "mutex" );
+            this.queue = new binarySemaphore( 0, "queue" );
         }
 
         public void waitB( )
@@ -72,7 +72,12 @@ public class Homework2Problem3
                 // wake up all queued threads
                 for ( int i = 0 ; i < n-1 ; i++ )
                 {
+                    // wake up a thread and "pass it the baton"
+                    // by requesting the mutex semaphore again
+                    // now it must wake up and release the mutex
+                    // semaphore before we wake up the next thread
                     this.queue.V( );
+                    this.mutex.P( );
                 }
                 
                 // leave critical section
@@ -85,6 +90,14 @@ public class Homework2Problem3
                 
                 // wait to be woken up
                 this.queue.P( );
+                
+                // if we were just woken up, we were "passed the baton"
+                // so we must give back the mutex thread to the thread
+                // which is systematically waking everyone up
+                // this guards against a thread waking up and continuing
+                // immediately on to the next iteration before everyone
+                // has called queue.P() for the current iteration
+                this.mutex.V( );
             }
         }
     }
