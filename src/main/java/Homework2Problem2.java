@@ -46,7 +46,7 @@ public class Homework2Problem2
                 // start entry section
 //                mutex.P( );
                 
-                waiting_0 = true;
+//                waiting_0 = true;
                 
                 // release mutex so that we don't block
                 // on turn_queue.P( ) holding mutex lock
@@ -64,7 +64,7 @@ public class Homework2Problem2
                 // re-acquire mutex to decrement waiting counter
 //                mutex.P( );
                 
-                waiting_0 = false;
+//                waiting_0 = false;
                 
                 // end entry section
 //                mutex.V( );
@@ -76,10 +76,10 @@ public class Homework2Problem2
                 s = s + 1;
                 
                 // set turn inside critical section
-                turn = 1;
+//                turn = 1;
                 
                 // notify Thread 1 that it is their turn
-                if ( waiting_1 )
+//                if ( waiting_1 )
                 {
                     turn_queue_1.V( );
                 }
@@ -102,7 +102,7 @@ public class Homework2Problem2
                 // start entry section
 //              mutex.P( );
               
-              waiting_1 = true;
+//              waiting_1 = true;
               
               // release mutex so that we don't block
               // on turn_queue.P( ) holding mutex lock
@@ -120,7 +120,7 @@ public class Homework2Problem2
               // re-acquire mutex to decrement waiting counter
 //              mutex.P( );
               
-              waiting_1 = false;
+//              waiting_1 = false;
               
               // end entry section
 //              mutex.V( );
@@ -132,10 +132,10 @@ public class Homework2Problem2
                 s = s + 1;
                 
                 // set turn inside critical section
-                turn = 0;
+//                turn = 0;
                 
                 // notify Thread 0 that it is their turn
-                if ( waiting_0 )
+//                if ( waiting_0 )
                 {
                     turn_queue_0.V( );
                 }
