@@ -67,21 +67,9 @@ public class Homework2Problem3
             // wake up all threads and reset the barrier
             if ( this.count == n )
             {
-                this.count = 0;
-                
-                // wake up all queued threads
-                for ( int i = 0 ; i < n-1 ; i++ )
-                {
-                    // wake up a thread and "pass it the baton"
-                    // by requesting the mutex semaphore again
-                    // now it must wake up and release the mutex
-                    // semaphore before we wake up the next thread
-                    this.queue.V( );
-                    this.mutex.P( );
-                }
-                
-                // leave critical section
-                this.mutex.V( );
+                // wake up one waiting thread
+                // (pass baton -- do not leave critical section)
+                this.queue.V( );
             }
             else
             {
@@ -91,13 +79,19 @@ public class Homework2Problem3
                 // wait to be woken up
                 this.queue.P( );
                 
-                // if we were just woken up, we were "passed the baton"
-                // so we must give back the mutex thread to the thread
-                // which is systematically waking everyone up
-                // this guards against a thread waking up and continuing
-                // immediately on to the next iteration before everyone
-                // has called queue.P() for the current iteration
-                this.mutex.V( );
+                // (we have been passed the baton -- enter critical section)
+                
+                // we're out of the queue, so decrement count
+                this.count--;
+                
+                // wake up the next thread (passing baton to it)
+                this.queue.V( );
+                
+                if ( this.count == 0 )
+                {
+                    // leave critical section
+                    this.mutex.V( );
+                }
             }
         }
     }
