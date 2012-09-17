@@ -60,12 +60,9 @@ public class Homework2Problem3
             // enter critical section
             this.mutex.P( );
             
-            // count number of waitB( ) calls
-            this.count++;
-            
             // if this is the last waitB( ) call
             // wake up all threads and reset the barrier
-            if ( this.count == n )
+            if ( this.count == n-1 )
             {
                 // wake up one waiting thread
                 // (pass baton -- do not leave critical section)
@@ -73,6 +70,9 @@ public class Homework2Problem3
             }
             else
             {
+                // count threads waiting on queue.P
+                this.count++;
+                
                 // leave critical section
                 this.mutex.V( );
                 
@@ -84,13 +84,15 @@ public class Homework2Problem3
                 // we're out of the queue, so decrement count
                 this.count--;
                 
-                // wake up the next thread (passing baton to it)
-                this.queue.V( );
-                
                 if ( this.count == 0 )
                 {
                     // leave critical section
                     this.mutex.V( );
+                }
+                else
+                {
+                    // wake up the next thread (passing baton to it)
+                    this.queue.V( );
                 }
             }
         }
