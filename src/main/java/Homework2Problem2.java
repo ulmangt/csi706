@@ -23,9 +23,6 @@ public class Homework2Problem2
         t1.join( );
     }
 
-    // controls access to critical section
-    private static countingSemaphore mutex = new countingSemaphore( 1, "mutex" );
-
     // semaphore for thread 0 to block on while awaiting its turn
     // ** starts at 1 to indicate that it is thread 0's turn initially **
     private static countingSemaphore turn_queue_0 = new countingSemaphore( 1, "turn0" );
@@ -54,19 +51,13 @@ public class Homework2Problem2
                 // threads take turns
                 turn_queue_0.P( );
 
-                // start critical section
-                mutex.P( );
-
                 // increment s inside critical section
                 s = s + 1;
+                
+                System.out.printf( "Thread 0 takes turn (s = %d)%n", s );
 
                 // notify thread 1 that it is their turn
                 turn_queue_1.V( );
-
-                System.out.printf( "Thread 0 takes turn (s = %d)%n", s );
-
-                // end critical section
-                mutex.V( );
             }
         }
     }
@@ -89,19 +80,13 @@ public class Homework2Problem2
                 // threads take turns
                 turn_queue_1.P( );
 
-                // start critical section
-                mutex.P( );
-
                 // increment s inside critical section
                 s = s + 1;
+                
+                System.out.printf( "Thread 1 takes turn (s = %d)%n", s );
 
                 // notify thread 0 that it is their turn
                 turn_queue_0.V( );
-
-                System.out.printf( "Thread 1 takes turn (s = %d)%n", s );
-
-                // end critical section
-                mutex.V( );
             }
         }
     }
