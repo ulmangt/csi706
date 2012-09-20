@@ -13,31 +13,36 @@ public class Homework2Problem2
 {
     public static void main( String[] args ) throws InterruptedException
     {
-        TDThread t0 = new IncrementThread0( );
-        TDThread t1 = new IncrementThread1( );
-        
+        TDThread t0 = new IncrementThread0( "thread0" );
+        TDThread t1 = new IncrementThread1( "thread1" );
+
         t0.start( );
         t1.start( );
-        
+
         t0.join( );
         t1.join( );
     }
 
     // controls access to critical section
-    private static countingSemaphore mutex = new countingSemaphore( 1 );
+    private static countingSemaphore mutex = new countingSemaphore( 1, "mutex" );
 
     // semaphore for thread 0 to block on while awaiting its turn
     // ** starts at 1 to indicate that it is thread 0's turn initially **
-    private static countingSemaphore turn_queue_0 = new countingSemaphore( 1 );
+    private static countingSemaphore turn_queue_0 = new countingSemaphore( 1, "turn0" );
 
     // semaphore for thread 1 to block on while awaiting its turn
-    private static countingSemaphore turn_queue_1 = new countingSemaphore( 0 );
+    private static countingSemaphore turn_queue_1 = new countingSemaphore( 0, "turn1" );
 
     // counter incremented by multiple threads
     private static int s = 0;
 
     public static class IncrementThread0 extends TDThread
     {
+        public IncrementThread0( String name )
+        {
+            super( name );
+        }
+
         @Override
         public void run( )
         {
@@ -68,6 +73,11 @@ public class Homework2Problem2
 
     public static class IncrementThread1 extends TDThread
     {
+        public IncrementThread1( String name )
+        {
+            super( name );
+        }
+
         @Override
         public void run( )
         {
@@ -89,7 +99,7 @@ public class Homework2Problem2
                 turn_queue_0.V( );
 
                 System.out.printf( "Thread 1 takes turn (s = %d)%n", s );
-                
+
                 // end critical section
                 mutex.V( );
             }

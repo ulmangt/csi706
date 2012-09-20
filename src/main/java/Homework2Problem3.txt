@@ -1,0 +1,39 @@
+
+We believe the BarrierSynchronization code is correct.
+
+
+
+
+-----------------------------------------------------
+Deadlock Detection Output
+-----------------------------------------------------
+
+start:Wed Sep 19 22:43:29 EDT 2012
+Monitoring for Deadlock.
+1/1
+25/25
+50/50
+75/75
+100/100
+125/125
+
+Reachability Testing completed.
+  Executions:144 / Sequences Collected:144
+  Elapsed time in minutes: 0.06668333333333333
+  Elapsed time in seconds: 4.001
+  Elapsed time in milliseconds: 4001
+  
+  
+-----------------------------------------------------
+Deadlock Detection Output With Symmetry Reduction
+-----------------------------------------------------
+  
+start:Wed Sep 19 22:53:55 EDT 2012
+Monitoring for Deadlock.
+1/1
+
+Reachability Testing completed.
+  Executions:1 / Sequences Collected:1
+  Elapsed time in minutes: -0.06665
+  Elapsed time in seconds: -3.999
+  Elapsed time in milliseconds: -3999
