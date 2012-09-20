@@ -1,8 +1,26 @@
 
 We believe the BarrierSynchronization code is correct.
 
+It passes the deadlock detection and reachability testing tool without errors.
 
+The "baton" passing approach used makes reasoning about the program's behavior more tractable:
 
+As threads call waitB() for the first time, they block on queue.P() until the last thread arrives.
+
+Instead of queuing up, this thread calls queue.V() to wake up one of the waiting threads and exits
+the critical section without calling mutex.V() (thus "passing the baton" to the thread it woke up).
+Because the critical section stays locked, even if this thread (or any thread woken up during the
+chained wake up described below) immediately calls waitB() again, it will block at the mutex.P()
+call until all threads have finished waking up and the barrier is ready for use again.
+
+The first thread which is woken up after all have reached the barrier assumes that it is inside the
+critical section and checks the current count of waiting threads. If their are more to wake, it calls
+queue.V() and exits the critical section without calling mutex.V() (again "passing the baton" to the
+next blocked thread). This continues until the last thread is woken. This thread simply calls
+mutex.V() to finally leave the critical section.
+
+At this point, count is back to 0, no thread is blocked on queue.P(), and no one is in the critical
+section. The Barrier is ready for use again.
 
 -----------------------------------------------------
 Deadlock Detection Output
