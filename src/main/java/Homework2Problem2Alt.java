@@ -29,10 +29,12 @@ public class Homework2Problem2Alt
     // semaphore for thread 1 to block on while awaiting its turn
     private static countingSemaphore queue = new countingSemaphore( 0, "queue" );
 
+    // the thread whose turn it is to enter the critical section
     private static int turn = 0;
-    
+
+    // indicates how many threads are waiting on queue
     private static int waiting = 0;
-    
+
     // counter incremented by multiple threads
     private static int s = 0;
 
@@ -47,30 +49,43 @@ public class Homework2Problem2Alt
         public void run( )
         {
             while ( true )
-            {                
+            {
+                // enter critical section
                 mutex.P( );
-                
+
+                // check whether it is out turn
                 if ( turn == 1 )
                 {
+                    // indicate we will be waiting on queue.P()
                     waiting++;
-                    
+
+                    // exit critical section before waiting on queue.P()
                     mutex.V( );
-                    
+
+                    // baton passing technique used below avoids VP type errors here
                     queue.P( );
                 }
+
+                // once here, we either called mutex.P() above or were 
+                // passed the baton by the caller of queue.V()
+                // so we are in the critical section
                 
+                // increment the counter
                 s = s + 1;
-                
+
+                // flip the turn variable
                 turn = 1;
-                
+
                 System.out.printf( "Thread 0 takes turn (s = %d)%n", s );
-                
+
+                // if the other thread is waiting, we need to notify them
                 if ( waiting > 0 )
                 {
                     waiting--;
-                    
+
                     queue.V( );
                 }
+                // otherwise, simply exit the critical section
                 else
                 {
                     mutex.V( );
@@ -90,28 +105,28 @@ public class Homework2Problem2Alt
         public void run( )
         {
             while ( true )
-            {                
+            {
                 mutex.P( );
-                
+
                 if ( turn == 0 )
                 {
                     waiting++;
-                    
+
                     mutex.V( );
-                    
+
                     queue.P( );
                 }
-                
+
                 s = s + 1;
-                
+
                 turn = 0;
-                
+
                 System.out.printf( "Thread 1 takes turn (s = %d)%n", s );
-                
+
                 if ( waiting > 0 )
                 {
                     waiting--;
-                    
+
                     queue.V( );
                 }
                 else
