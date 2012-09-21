@@ -20,17 +20,17 @@ public class Problem6
         new IncrementThread0( ).start( );
         new IncrementThread1( ).start( );
     }
-    
+
     // controls access to critical section
     private static AtomicBoolean b = new AtomicBoolean( false );
-    
+
     // turn counter indicating which thread
     // should proceed into the critical section next
     private static volatile int turn = 0;
-    
+
     // counter incremented by multiple threads
     private static int s = 0;
-    
+
     public static class IncrementThread0 extends Thread
     {
         @Override
@@ -38,38 +38,40 @@ public class Problem6
         {
             while ( true )
             {
-                // wait outside of the critical section for our turn
-                // this violates progress requirement, but this is inevitable
-                // because we are specifically required to have the
-                // threads take turns
-                while( turn == 1 )
+                while ( true )
                 {
-                    // busy wait
+                    //enter critical section to check turn variable
+                    while ( b.getAndSet( true ) )
+                    {
+
+                    }
+
+                    if ( turn == 1 )
+                    {
+                        // exit critical section and queue back up to enter again
+                        b.set( false );
+                    }
+                    else
+                    {
+                        // it's our turn, exit loop (staying in critical section)
+                        break;
+                    }
                 }
-                
-                // return false if nothing is inside
-                // the critical section and we can proceed
-                while ( b.getAndSet( true ) )
-                {
-                    // busy wait
-                }
-                
+
                 // increment s inside critical section
                 s = s + 1;
-                
+
                 // set turn inside critical section
                 turn = 1;
 
                 System.out.printf( "Thread 0 takes turn (s = %d)%n", s );
-                
-                // allow others to enter the critical section
-                b.set( false );
 
-                // non-critical section
+                // exit critical section
+                b.set( false );
             }
         }
     }
-    
+
     public static class IncrementThread1 extends Thread
     {
         @Override
@@ -77,34 +79,35 @@ public class Problem6
         {
             while ( true )
             {
-                // wait outside of the critical section for our turn
-                // this violates bounded wait, but this is inevitable
-                // because we are specifically required to have the
-                // threads take turns
-                while( turn == 0 )
+                while ( true )
                 {
-                    // busy wait
+                    //enter critical section to check turn variable
+                    while ( b.getAndSet( true ) )
+                    {
+
+                    }
+
+                    if ( turn == 0 )
+                    {
+                        // exit critical section
+                        b.set( false );
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
-                
-                // return false if nothing is inside
-                // the critical section and we can proceed
-                while ( b.getAndSet( true ) )
-                {
-                    // busy wait
-                }
-                
+
                 // increment s inside critical section
                 s = s + 1;
-                
+
                 // set turn inside critical section
                 turn = 0;
 
                 System.out.printf( "Thread 1 takes turn (s = %d)%n", s );
-                
-                // allow others to enter the critical section
-                b.set( false );
 
-                // non-critical section
+                // exit critical section
+                b.set( false );
             }
         }
     }
