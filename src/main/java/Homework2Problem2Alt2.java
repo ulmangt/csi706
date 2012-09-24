@@ -52,6 +52,8 @@ public class Homework2Problem2Alt2
                 
                 if ( turn == 1 )
                 {
+                    waiting++;
+                    
                     mutex.V( );
                     
                     queue.P( );
@@ -72,6 +74,8 @@ public class Homework2Problem2Alt2
                 
                 if ( waiting > 0 )
                 {
+                    waiting--;
+                    
                     queue.V( );
                 }
                 
@@ -97,7 +101,6 @@ public class Homework2Problem2Alt2
                 if ( turn == 0 )
                 {
                     waiting++;
-                    turn = 1;
                     
                     mutex.V( );
                     
@@ -108,9 +111,11 @@ public class Homework2Problem2Alt2
                     mutex.V( );
                 }
                 
+                
                 mutex.P( );
                 
                 s = s + 1;
+                
                 turn = 0;
                 
                 System.out.printf( "Thread 1 takes turn (s = %d)%n", s );
