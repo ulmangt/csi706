@@ -99,15 +99,15 @@ R1 and Q5 and they cannot be concurrent.
 
 e1: { P, V }
 
-e2: { V }
+e2: { P, V }
 
-e3: { P, V }
+e3: { V }
 
-e4: { V }
+e4: { P, V }
 
-e5: { V }
+e5: { P }
 
-e6: { P }
+e6: { V }
 
 
 === Problem 2 Part b ===
