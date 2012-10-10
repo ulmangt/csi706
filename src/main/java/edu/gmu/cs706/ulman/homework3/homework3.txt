@@ -99,15 +99,27 @@ R1 and Q5 and they cannot be concurrent.
 
 e1: { P, V }
 
+(counting semaphore value is 2)
+
 e2: { P, V }
+
+(counting semaphore value is 1)
 
 e3: { V }
 
+(two P operations have occurred and counting semaphore value is 0)
+
 e4: { P, V }
+
+(counting semaphore value is 1)
 
 e5: { P }
 
+(binary semaphore value is 1)
+
 e6: { V }
+
+(binary semaphore value is 0)
 
 
 === Problem 2 Part b ===
@@ -129,15 +141,19 @@ e6: [ 4, 2 ]
 === Problem 2 Part c ===
 
 
-e1: { c1, c2, c4 }
+e1: { c2, c4 }
 
-e2: { c2, ,c3, c4 }
+(c3 is not a possibility because of condition 4. Calls to semaphore methods made by the same thread are completed in the order they are received, so c1 and c3 cannot both be in the race set of e1)
 
-e3: { c4 }
+e2: { c3, c4 }
 
-(c4 is not a possibility because P is not in the open set of e2)
+e3: { }
+
+(c4 is not a possibility because P is not in the open set of e3)
 
 e4: { }
+
+(c1, c2, and c3 all have happens-before relationships with e4)
 
 e5: { }
 
