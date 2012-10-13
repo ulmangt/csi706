@@ -1,0 +1,59 @@
+semaphore timestamps --
+
+can't check "happens before" relationship for two send operations (two calls)
+
+Midterm: Fig 7.24a ) "r6, which was matched with s6, could have been matched with s1, s2, or s3 instead"
+
+Additional rule for Midterm: "assume first come first serve, so no crossing of events from a single thread -- so look at 7.24b NOT a"
+
+(because s1, s2, s3 are send events, are sent to Thread 2, and r6 does not happen before s1, s2, or s3)
+
+(if r6 happened before s1, s2, s3, there is no way it could receive those messages, since they won't be sent until after r6 happens)
+
+
+For Semaphores versus Message Passing, the only difference is the Open Lists must be taken into account.
+
+
+
+4. Monitors
+
+replace entry and exit sections of passing-the-baton semaphore solution and replace them with wait() and signal() method calls
+
+Passing the baton monitor:
+
+if ( condition )
+{
+  wait...
+}
+
+Non-passing the baton monitor:
+
+while( condition )
+{
+  wait...
+}
+
+Need a barging flag to prevent the thread the "wrong" thread from entering
+
+while( condition || barging )
+{
+  wait...
+}
+
+
+boundedBuffer example
+
+notFull / notEmpty queues are semaphores
+entryQueue is a mutex
+
+numWaiting variables are not necessary
+
+In java, no condition variables, so wait() on the same variable and signalAll()
+
+4.7.1 Java Monitor Implementation
+
+4.5 Semaphores are easy to implement with Monitors
+
+
+
+Midterm: given a problem, solve with semaphores, solve with SC (non-baton passing monitor), SU (baton-passing monitor)

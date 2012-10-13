@@ -1,0 +1,29 @@
+3 semaphore patterns:
+
+init( 0 ) -- creating a place for threads to block on a condition (value of the semaphore should always be negative by only calling V while someone is waiting)
+init( 1 ) -- mutex -- solving critical section problem
+init( n ) -- guarding access to n limited resources
+
+
+mutex lock  -- different from semaphore in that a Thread can lock multiple times (but must unlock that many times). sempahore's have no notion of ownership
+
+
+producer / consumer code contains no mutex (in the case of only one producer and one consumer)
+
+
+reader / writer -- made first come first serve  because writers essentially pass their lock on the mutex to waiting reader
+
+get mutual exclustion (mutex.P), wake someone else up, they release the mutex (mutex.V)  "passing the baton"
+
+midterm questions -- what happens when order of statements are switched? for reader/writer
+
+solve same problem 3 ways (semaphores, monitors, message passing)
+
+consider context switches between V / P (releasing one semaphore and acquiring another)
+
+
+
+
+3.12 R > W.2
+
+The way you ensure readers don't read while writers are waiting is that readers DONT release lock when they wait on writers_r_que.

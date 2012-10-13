@@ -1,0 +1,27 @@
+In code you'll have something like:
+
+mutex.V
+turn.P
+
+However I don't because I use two blocking queues (one initialized to 1)
+
+
+
+############## baton passing ####################
+
+if ( )
+{
+//something
+}
+else
+{
+mutex.V()
+}
+
+
+
+
+VP Reduction / Symmetry Reduction
+
+
+Reachability Testing traces *completions* of P/V operations

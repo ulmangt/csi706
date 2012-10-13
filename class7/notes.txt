@@ -1,0 +1,97 @@
+wait and signalAll()
+
+SU monitor has 4th queue -- reentry queue
+
+signalAndExit()
+
+or:
+
+signal()
+exitMonitor()
+
+(but if you have nothing left to do after signaling, you may as well exit so that you don't have to get stuck in the reentryQueue just to exit the monitor again)
+
+
+-----------------------------------------------------------
+
+
+Homework -- extends either:
+
+monitorSC (which uses wait/signalAll) (handle barging)
+use while (because when you wake up, someone else may have gotten in first)
+
+monitorSU (which uses wait/signal (passing the baton))
+(don't need numWaiting > 0 check before signal)
+use if
+
+
+-----------------------------------------------------------
+
+
+4.2.1 - two examples of Counting Semaphore implementations
+
+
+Midterm: problem asking to modify SC/SU monitor
+
+Trace through monitorSU code
+
+
+----------------------------------------------------------------
+
+for synchronous message passing or semaphore vector timestamps, even through the send/receive pairs act like double headed arrows, the timestamps need to be different to support race analysis
+
+s1 / r1 don't have the same timestamp
+but timestamp must be updated along dashed line
+
+See Figure 3 in slides
+
+
+Midterm: Know Definition 6.3 (this rule is for Figure a) / Figure 7.24a/b
+
+is S8 in race set of r6 -- no, r6 happens before s8
+
+
+
+-----------------------------------------------------------------
+
+
+synchronization pair - "telling you where the arrows are" - e1/c2 are a synchronization pair
+
+
+-----------------------------------------------------------------
+
+Race between two V operations -- if you have a variant when you could change a P to a V, don't do it
+This is what VP reduction does
+
+--------------------------------------------------
+
+Figure 7-29
+
+Once we create the 3 variants, we place dashed lines because we don't know the order in which things will be received once we change things
+
+
+Table 7.3
+
+Columns are receives with non-empty race sets (nothing to change if the race set was empty)
+If one race happened-before the other, it is placed farther to the left (they could be all concurrent, in which case ordering is arbitrary -- similar to integer timestamps)
+
+
+
+Text explanation of row 2 in table: "keep r2 the same, change r3 by replacing with the first thing in its race set, and drop r4 because we don't know what will happen once we change r3"
+
+
+Don't need to try all orders of concurrent sends
+
+
+-------------------------------------------------------------
+
+Figure 7.30
+
+In creating V3, we created it from Q0 by changing the second event. Then in Q3, we see a race between the 1st W and 2nd D (the second event) -- however we already changed this event in V3 -- so we don't want to try the variant where we change the second event
+
+When you change an event, you color/mark anything before it
+
+Thus, cost of reachability testing is 1 bit
+
+
+Midterm sections: 1, 2, 3, 4, a section of 6, reachability testing from 7

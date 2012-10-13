@@ -1,0 +1,47 @@
+Make variant sequence, then we can't tell what will happen next, so we run again, then make more variants.
+
+
+If two threads are calling P or V at the same time (a race), we can make the other one win next time and re-run, which might lead to new sequences.
+
+Definition 1 Figure 4
+
+e1:(s,{P},1)[0,1]
+
+e1    - event name
+s     - what semaphore
+{P}   - what operations were open (only P was allowed because this was a binary semaphore)
+1     - event sequence number (for semaphore or thread)
+[0,1] - timestamp (vector with length equal to number of threads)
+
+
+In Definition 1 Figure 4 -- the events are totally ordered because there is one binary semaphore
+
+In general, only a partial ordering of events is recoreded (if two threads don't have a happens-before relationship enforced by operations on a mutual semaphore)
+
+Figure 6.11
+
+Following message diagram from one event to another indicates whether there is a happens-before relationship.
+
+Numbers do not indicate ordering (consider a and w)
+
+A send (arrow) includes your number. The receive is stamped with *at least* one more than the send (but must also be ahead of the receiver's clock.
+
+Events are put in total order (ties broken by process ID) but it doesn't tell us when things happen at the same time. It does implement first come first serve queuing.
+
+If s happened before t then number for s < number for t.
+Number for s < t does not imply that s happened before t.
+
+did a happen before y -- look at the number corresponding to the thread that did *a*
+
+Synchronous communication (double headed arrows) stamps both with same value.
+
+
+7.5.3 Race Analysis
+"talking about switching when sends are received"`
+"Change b from a->c"
+
+(4) in this case we can force d to be received before b
+(5) yes
+(6) yes
+(7) yes (e->f is not changed)
+(8)
