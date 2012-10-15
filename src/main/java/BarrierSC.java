@@ -63,12 +63,12 @@ class SCBarrier extends monitorSC
     {
         enterMonitor( "waitB" );
         exerciseEvent( "Thread " + ID + " beginWaitB" ); // ignore these calls, for now.
-
-        // decrement the count
-        count--;
         
-        if ( count > 0 )
-        {            
+        if ( count > 1 )
+        {
+            // decrement the count
+            count--;
+            
             // while the count is non-negative, wait on the proceed condition
             proceedCondition.waitC( );
         }

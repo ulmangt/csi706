@@ -66,25 +66,19 @@ class SUBarrier extends monitorSU
     {
         enterMonitor( "waitB" );
         exerciseEvent( "Thread " + ID + " beginWaitB" ); // ignore these calls, for now.
-
-        // decrement the count
-        count--;
         
-        if ( count > 0 )
-        {            
+        if ( count > 1 )
+        {
+            count--;
+            
             // while the count is non-negative, wait on the proceed condition
             proceedCondition.waitC( );
 
-            count++;
-            
-            // once we wake up, signal the next waiting thread
-            proceedCondition.signalC( );
+            count++;   
         }
-        else
-        {
-            // signal all waiting threads that they may proceed
-            proceedCondition.signalC( );
-        }
+        
+        // signal the next waiting thread
+        proceedCondition.signalC( );
 
         exerciseEvent( "Thread " + ID + " endWaitB" ); // ignore these calls, for now.
         exitMonitor( );
