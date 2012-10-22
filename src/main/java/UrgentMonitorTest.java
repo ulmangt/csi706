@@ -70,16 +70,22 @@ class SCUBarrier extends UrgentMonitorSC
             
             // while the count is non-negative, wait on the proceed condition
             proceedCondition.waitC( );
+            
+            if ( ID == 1 ) try { Thread.sleep( 100 ); } catch (Exception e) { };
         }
         else
         {
             // set the count back to n to reset the barrier
             count = n;
             
+            if ( ID == 2 ) try { Thread.sleep( 100 ); } catch (Exception e) { };
+            
             // signal all waiting threads that they may proceed
             proceedCondition.signalCall( );
         }
 
         exitMonitor( );
+        
+        if ( ID == 3 ) try { Thread.sleep( 100 ); } catch (Exception e) { };
     }
 }

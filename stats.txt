@@ -1,3 +1,2 @@
-New Test Run at Sun Oct 21 22:49:35 EDT 2012
+New Test Run at Sun Oct 21 23:28:22 EDT 2012
 1:NumOfSeqs (executed) 2:Remaining Groups 3:Variants Generated
-25 6 1

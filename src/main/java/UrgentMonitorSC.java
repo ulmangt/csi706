@@ -1,8 +1,12 @@
 public class UrgentMonitorSC
 {
     private binarySemaphore mutex = new binarySemaphore( 1 );
+    
+    // a queue for signaled threads to wait on
     private binarySemaphore reentry = new binarySemaphore( 0 );
-    private int waiting = 0;
+    
+    // a count of the total signaled threads over all condition variables
+    private int numReentryThreads = 0;
     
     protected final class conditionVariable
     {
@@ -14,6 +18,8 @@ public class UrgentMonitorSC
             if ( numWaitingThreads > 0 )
             {
                 numWaitingThreads--;
+                // increment numReentryThreads here while we hold mutex.P()
+                numReentryThreads++;
                 threadQueue.V( );
             }
         }
@@ -22,7 +28,9 @@ public class UrgentMonitorSC
         {
             while ( numWaitingThreads > 0 )
             {
-                --numWaitingThreads;
+                numWaitingThreads--;
+                // increment numReentryThreads here while we hold mutex.P()
+                numReentryThreads++;
                 threadQueue.V( );
             }
         }
@@ -31,9 +39,12 @@ public class UrgentMonitorSC
         {
             numWaitingThreads++;
             threadQueue.VP( mutex );
-            waiting++;
+            
+            // instead of mutex.P() get in the reentry.P() queue
             reentry.P( );
-            waiting--;
+            
+            // we are back in the monitor, so decrement numReentryThreads
+            numReentryThreads--;
         }
 
         public boolean empty( )
@@ -54,7 +65,10 @@ public class UrgentMonitorSC
 
     protected void exitMonitor( )
     {
-        if ( waiting > 0 )
+        // if there are any signaled threads, let one of them go first
+        // thus, the thread calling signal will not call mutex.V() and any
+        // new threads entering the monitor will block on mutex.P() in enterMonitor()
+        if ( numReentryThreads > 0 )
         {
             reentry.V( );
         }

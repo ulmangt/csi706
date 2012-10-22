@@ -1,5 +1,7 @@
 (*This file is read-only; the Thread IDs cannot be changed.*)
-SUBarrierMonitor 1
-WorkerThread1 2
-WorkerThread2 3
-WorkerThread3 4
+main_binarySemaphore1 1
+main_binarySemaphore2 2
+main_countingSemaphore1 3
+WorkerThread1 4
+WorkerThread2 5
+WorkerThread3 6
