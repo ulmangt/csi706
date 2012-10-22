@@ -1,0 +1,15 @@
+Coloring algorithm is recursive -- depth first search of tree -- the coloring is saved at every stack frame?
+
+
+Exam -- given trace Q0
+
+1) timestamp
+2) race sets
+3) race table
+
+Show coloring receives changed black
+Show old sends are removed from race set
+
+No recollected receives
+
+Practice problem will be posted

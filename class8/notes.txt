@@ -1,0 +1,74 @@
+Exam Thursday 1st - Taken on class in campus
+
+
+monitor open list always has all monitor methods (you can always open the monitor)
+
+monitor timestamps: dotted line on signal call return updates clock of caller
+
+When justifying happens before, only need to check timestamp i for e_j happens before e_i
+
+Exam: race analysis will assume first-come-first-serve -- all queues and message passing, semaphores, etc... will be first-come-first-serve
+
+
+
+
+------------------------------------------------
+Race Tables
+
+Events that happen after a receive are removed -- so at least one difference between variant.
+
+But if multiple receives happened concurrently then we will be changing their sends in all combinations of the concurrent events.
+
+Columns are all receives with non-empty race sets.
+
+If r3 is to the right of r2 then r3 did not happen before r2.
+
+0 means not changing receive > 0 means we are changing receive to event with that index
+
+
+r4 did happen after r3, so once we change r3 we put a -1 in r4 column (because we can't be sure that r4 will even happen once we have changed r3)
+
+If r3 and r4 were concurrent, then you would have:
+
+0 1
+1 0
+1 1
+
+Instead of:
+
+0  1
+1 -1
+
+
+Changing an event causes it to be marked (colored from white to black), then we won't change 
+
+
+Edges of variant graph: are variants.
+Nodes Q are results of runs.
+b) is a successful testing process, missing edges are non-executed variants because they would result in 
+
+
+Q0 -> Q3 -> Q4  indicates there is a variant of Q0 in which there were three rows in the race
+
+So, algorithm is:
+
+Step 1. Generate race table from race sets
+Step 2. If the receive is black, cross out row
+
+Taking black receives (columns) out of race table, edges of the graph are removed.
+
+
+
+
+---------------------------------------------
+Figure 7.31
+
+in Q2, when generating race set of r1 in Q2, remove all _old_ send events
+
+i.e. for all old white receives, remove all old sends
+
+which prevents changing something now which we decided not to change in a previous step
+
+
+
+
