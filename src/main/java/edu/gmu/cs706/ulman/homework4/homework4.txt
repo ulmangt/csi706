@@ -1,0 +1,209 @@
+
+CS706
+Homework 4
+10/21/2012
+Wu Lan
+Geoffrey Ulman
+
+------------------------------------------------------------------------
+
+-----------------------------------------------------
+Problem 1: BarrierSC.java
+-----------------------------------------------------
+
+class SCBarrier extends monitorSC
+{
+    private int n; // number of threads
+
+    private int count; // number of waiting threads
+    
+    private conditionVariable proceedCondition;
+    
+    public SCBarrier( int n )
+    {
+        super( "SCBarrierMonitor" );
+        this.n = n;
+        this.count = n;
+        this.proceedCondition = new conditionVariable( );
+    }
+
+    public void waitB( int ID )
+    {
+        enterMonitor( "waitB" );
+        exerciseEvent( "Thread " + ID + " beginWaitB" ); // ignore these calls, for now.
+        
+        if ( count > 1 )
+        {
+            // decrement the count
+            count--;
+            
+            // while the count is non-negative, wait on the proceed condition
+            proceedCondition.waitC( );
+        }
+        else
+        {
+            // set the count back to n to reset the barrier
+            count = n;
+            
+            // signal all waiting threads that they may proceed
+            proceedCondition.signalCall( );
+        }
+
+        exerciseEvent( "Thread " + ID + " endWaitB" ); // ignore these calls, for now.
+        exitMonitor( );
+    }
+}
+
+-----------------------------------------------------
+Statement of Correctness
+-----------------------------------------------------
+
+We believe our solution is correct. No deadlock is detected by the reachability testing tool.
+The fact that the tool finds only one possible sequence with symmetry reduction on, coupled with the fact that the barrier works correctly in our test runs, gives us confidence that there are no sequences which allow one thread to break past the barrier and execute twice out of turn.
+
+-----------------------------------------------------
+File: ThreadID.txt
+-----------------------------------------------------
+
+SCBarrierMonitor 1
+WorkerThread1 2
+WorkerThread2 3
+WorkerThread3 4
+
+-----------------------------------------------------
+File: symmetry.txt
+-----------------------------------------------------
+
+3 4 5
+
+-----------------------------------------------------
+Deadlock Detection Output With Symmetry Reduction
+-----------------------------------------------------
+
+start:Sun Oct 21 22:37:46 EDT 2012
+Monitoring for Deadlock.
+1/1
+
+Reachability Testing completed.
+  Executions:5 / Sequences Collected:5
+  Elapsed time in minutes: 0.06666666666666667
+  Elapsed time in seconds: 4.0
+  Elapsed time in milliseconds: 4000
+
+
+-----------------------------------------------------
+Deadlock Detection Output (Without Symmetry Reduction)
+-----------------------------------------------------
+
+start:Sun Oct 21 22:34:31 EDT 2012
+Monitoring for Deadlock.
+1/1
+25/25
+50/50
+75/75
+100/100
+125/125
+150/150
+175/175
+200/200
+225/225
+250/250
+275/275
+300/300
+325/325
+350/350
+
+Reachability Testing completed.
+  Executions:360 / Sequences Collected:360
+  Elapsed time in minutes: 0.06668333333333333
+  Elapsed time in seconds: 4.001
+  Elapsed time in milliseconds: 4001
+
+-----------------------------------------------------
+Problem 2: BarrierSU.java
+-----------------------------------------------------
+
+class SUBarrier extends monitorSU
+{
+    private int n; // number of threads
+
+    private int count; // number of waiting threads
+    
+    private conditionVariable proceedCondition;
+    
+    public SUBarrier( int n )
+    {
+        super( "SUBarrierMonitor" );
+        this.n = n;
+        this.count = n;
+        this.proceedCondition = new conditionVariable( );
+    }
+
+    public void waitB( int ID )
+    {
+        enterMonitor( "waitB" );
+        exerciseEvent( "Thread " + ID + " beginWaitB" ); // ignore these calls, for now.
+        
+        if ( count > 1 )
+        {
+            count--;
+            
+            // while the count is non-negative, wait on the proceed condition
+            proceedCondition.waitC( );
+
+            count++;   
+        }
+        
+        // signal the next waiting thread
+        proceedCondition.signalC( );
+
+        exerciseEvent( "Thread " + ID + " endWaitB" ); // ignore these calls, for now.
+        exitMonitor( );
+    }
+}
+
+-----------------------------------------------------
+File: ThreadID.txt
+-----------------------------------------------------
+
+SUBarrierMonitor 1
+WorkerThread1 2
+WorkerThread2 3
+WorkerThread3 4
+
+-----------------------------------------------------
+File: symmetry.txt
+-----------------------------------------------------
+
+3 4 5
+
+-----------------------------------------------------
+Deadlock Detection Output With Symmetry Reduction
+-----------------------------------------------------
+
+start:Sun Oct 21 22:48:46 EDT 2012
+Monitoring for Deadlock.
+1/1
+
+Reachability Testing completed.
+  Executions:1 / Sequences Collected:1
+  Elapsed time in minutes: -0.06666666666666667
+  Elapsed time in seconds: -4.0
+  Elapsed time in milliseconds: -4000
+
+-----------------------------------------------------
+Deadlock Detection Output (Without Symmetry Reduction)
+-----------------------------------------------------
+
+start:Sun Oct 21 22:49:35 EDT 2012
+Monitoring for Deadlock.
+1/1
+25/25
+
+Reachability Testing completed.
+  Executions:36 / Sequences Collected:36
+  Elapsed time in minutes: 0.06666666666666667
+  Elapsed time in seconds: 4.0
+  Elapsed time in milliseconds: 4000
+
+

@@ -37,7 +37,7 @@ class WorkerThreadSC extends TDThread
     {
         for ( int i = 0; i < 2; i++ )
         {
-            System.out.println("Worker"+ID+" did work");
+//            System.out.println("Worker"+ID+" did work");
             b.waitB( ID );
         }
     }

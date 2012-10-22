@@ -1,12 +1,12 @@
 
-public class BarrierSU
+public class UrgentMonitorTest
 {
     public static void main( String args[] )
     {
-        SUBarrier b = new SUBarrier( 3 );
-        WorkerThreadSU w1 = new WorkerThreadSU( b, 1 );
-        WorkerThreadSU w2 = new WorkerThreadSU( b, 2 );
-        WorkerThreadSU w3 = new WorkerThreadSU( b, 3 );
+        SCUBarrier b = new SCUBarrier( 3 );
+        WorkerThreadSCU w1 = new WorkerThreadSCU( b, 1 );
+        WorkerThreadSCU w2 = new WorkerThreadSCU( b, 2 );
+        WorkerThreadSCU w3 = new WorkerThreadSCU( b, 3 );
         w1.start( );
         w2.start( );
         w3.start( );
@@ -19,17 +19,15 @@ public class BarrierSU
         catch ( InterruptedException e )
         {
         }
-        
-//        System.out.println("-------");
     }
 }
 
-class WorkerThreadSU extends TDThread
+class WorkerThreadSCU extends TDThread
 {
     private int ID;
-    private SUBarrier b;
+    private SCUBarrier b;
 
-    public WorkerThreadSU( SUBarrier b, int ID )
+    public WorkerThreadSCU( SCUBarrier b, int ID )
     {
         super( "WorkerThread" + ID );
         this.ID = ID;
@@ -40,13 +38,13 @@ class WorkerThreadSU extends TDThread
     {
         for ( int i = 0; i < 2; i++ )
         {
-//            System.out.println("Worker"+ID+" did work");
+            System.out.println("Worker"+ID+" did work");
             b.waitB( ID );
         }
     }
 }
 
-class SUBarrier extends monitorSU
+class SCUBarrier extends UrgentMonitorSC
 {
     private int n; // number of threads
 
@@ -54,9 +52,8 @@ class SUBarrier extends monitorSU
     
     private conditionVariable proceedCondition;
     
-    public SUBarrier( int n )
+    public SCUBarrier( int n )
     {
-        super( "SUBarrierMonitor" );
         this.n = n;
         this.count = n;
         this.proceedCondition = new conditionVariable( );
@@ -64,23 +61,25 @@ class SUBarrier extends monitorSU
 
     public void waitB( int ID )
     {
-        enterMonitor( "waitB" );
-        exerciseEvent( "Thread " + ID + " beginWaitB" ); // ignore these calls, for now.
+        enterMonitor( );
         
         if ( count > 1 )
         {
+            // decrement the count
             count--;
             
             // while the count is non-negative, wait on the proceed condition
             proceedCondition.waitC( );
-
-            count++;   
         }
-        
-        // signal the next waiting thread
-        proceedCondition.signalC( );
+        else
+        {
+            // set the count back to n to reset the barrier
+            count = n;
+            
+            // signal all waiting threads that they may proceed
+            proceedCondition.signalCall( );
+        }
 
-        exerciseEvent( "Thread " + ID + " endWaitB" ); // ignore these calls, for now.
         exitMonitor( );
     }
 }
