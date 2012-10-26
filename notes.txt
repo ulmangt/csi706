@@ -1,0 +1,35 @@
+1-4,6,7
+monitorSC,monitorSU (given on exam)
+unexpected results
+critical section problem
+bounded waiting
+solve problem with semaphores then monitorSC then monitorSU
+integer / vector timestamp
+race set / race table
+reachability testing
+
+
+five questions
+
+events after dotted lines are always white -- new events which were not in the variant
+
+only color events which changed black (and any events before it)
+
+Also note in practice problem, switching the events on T3/T4 causes new events / mutex operations on mutex1
+
+in V1 we don't consider the T1/T2 race to be changed 
+but we have new races between T4 / T2 and T4 / T1
+
+
+
+V1 race set -- columns indicate events
+
+  receive 1 (mutex1)     receive 2 (mutex1)
+------------------------------------------
+V4       1                        -1
+V5       0                         1
+
+
+
+In V3, mutex 1 P operation will be black, so new send from T4
+will be ignorred
